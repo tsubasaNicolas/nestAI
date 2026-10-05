@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { InternalServerErrorException } from '@nestjs/common';
 import * as fs from 'fs';
 import OpenAI from 'openai';
@@ -17,12 +19,17 @@ export const imageVariationUseCase = async (
   const pngImagePath = await downloadImageAsPng(baseImage, true);
 
   const response = await openai.images.createVariation({
-    model: 'dall-e-2',
+    model: 'dall-e-2' as any,
     image: fs.createReadStream(pngImagePath),
     n: 1,
     size: '1024x1024',
-    response_format: 'url',
-  });
+  } as any);
+
+  if (!response.data || response.data.length === 0) {
+    throw new InternalServerErrorException(
+      'No se recibieron datos en la respuesta de la variación de imagen.',
+    );
+  }
 
   const imageUrl = response.data[0]?.url;
 
@@ -35,9 +42,10 @@ export const imageVariationUseCase = async (
   const fileName = await downloadImageAsPng(imageUrl);
 
   const url = `${process.env.SERVER_URL}/gpt/image-generation/${fileName}`;
+  
   return {
     url: url,
-    openAIUrl: response.data[0].url,
-    revised_prompt: response.data[0].revised_prompt,
+    openAIUrl: imageUrl,
+    revised_prompt: response.data[0]?.revised_prompt ?? '',
   };
 };

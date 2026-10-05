@@ -14,9 +14,12 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: 'https://angulargpt-production.up.railway.app',
+    origin: [
+      'https://angulargpt-production.up.railway.app',
+      'http://localhost:4200', // O el puerto en el que corra tu Angular local (suele ser 4200)
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true, // Si necesitas enviar cookies o encabezados de autenticación
+    credentials: true,
   });
 
   app.use(bodyParser.json({ limit: '10mb' }));

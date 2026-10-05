@@ -1,8 +1,15 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-var-requires */
 import * as path from 'path';
 import * as fs from 'fs';
-import * as sharp from 'sharp';
 
 import { InternalServerErrorException } from '@nestjs/common';
+
+// Carga segura compatible con CommonJS en NestJS para sharp
+const sharp = require('sharp');
 
 export const downloadImageAsPng = async (
   url: string,
@@ -22,8 +29,6 @@ export const downloadImageAsPng = async (
 
   const buffer = Buffer.from(await response.arrayBuffer());
 
-  // fs.writeFileSync(`${folderPath}/${imageNamePng}`, buffer);
-
   const completePath = path.join(folderPath, imageNamePng);
 
   await sharp(buffer).png().ensureAlpha().toFile(completePath);
@@ -35,7 +40,7 @@ export const downloadBase64ImageAsPng = async (
   base64Image: string,
   fullPath: boolean = false,
 ) => {
-  // Remover encabezado
+  // Remover encabezado si lo trae
   base64Image = base64Image.split(';base64,').pop() || '';
   const imageBuffer = Buffer.from(base64Image, 'base64');
 
@@ -46,7 +51,6 @@ export const downloadBase64ImageAsPng = async (
 
   const completePath = path.join(folderPath, imageNamePng);
 
-  // Transformar a RGBA, png // Así lo espera OpenAI
   await sharp(imageBuffer).png().ensureAlpha().toFile(completePath);
 
   return fullPath ? completePath : imageNamePng;
