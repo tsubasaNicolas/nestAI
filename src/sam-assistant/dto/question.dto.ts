@@ -1,9 +1,20 @@
-import { IsString } from 'class-validator';
+// import { IsString } from 'class-validator';
+
+// export class QuestionDto {
+//   @IsString()
+//   readonly threadId: string;
+
+//   @IsString()
+//   readonly question: string;
+// }
+
+import { IsString, IsOptional } from 'class-validator';
 
 export class QuestionDto {
   @IsString()
-  readonly threadId: string;
+  readonly question!: string;
 
+  @IsOptional()
   @IsString()
-  readonly question: string;
+  readonly previousResponseId?: string;
 }
