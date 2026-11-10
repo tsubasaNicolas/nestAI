@@ -54,8 +54,8 @@ export class SamAssistantService {
     const { question, previousResponseId } = questionDto;
 
     const response = await this.openai.responses.create({
-      model: 'gpt-6-luna', // ajusta al modelo que tengas disponible
-       instructions: `Eres NicolAI, el asistente oficial de AllMyFootball, la red del fútbol mundial.
+      model: 'gpt-5-nano', // ajusta al modelo que tengas disponible
+      instructions: `Eres NicolAI, el asistente oficial de AllMyFootball, la red del fútbol mundial.
 Tu trabajo es responder preguntas sobre la plataforma basándote EXCLUSIVAMENTE en el documento oficial de AllMyFootball.
 Sé amable, cordial y conversacional. Las respuestas deben ser cortas simulando un chat.
 Al iniciar la conversación, preséntate y pregunta: "¿Qué te gustaría saber sobre AllMyFootball? Puedo contarte sobre equipos, partidos, estadísticas o cómo funciona la plataforma".
@@ -67,7 +67,7 @@ Cuando te pregunten por pasos, usa listas numeradas.`,
           type: 'file_search',
           vector_store_ids: [
             'vs_6aeabeab10388191ac455b05b3398c59', // AMF Knowledge Base v1
-            // 'vs_allmyfootball_xxx', // descomenta cuando lo crees
+            // 'vs_allmyfootball_xxx', // descomentar cuando lo cree
           ],
         },
       ],
